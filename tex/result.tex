@@ -1,0 +1,57 @@
+\section{Results and Analysis}
+
+To validate the proposed morphing architecture and control strategy, a comprehensive dynamic simulation was conducted. The simulation integrates the coupled hydro-aerodynamic model with the bifurcation-based CPG controller.
+
+\subsection{Simulation Setup}
+The physical parameters of the Aero-Aqua Ray are defined based on a prototype scale suitable for field deployment. The robot has a total mass of $2.0$ kg and a deployed wing planform area of $0.6$ m$^2$. The environmental parameters assume standard sea level conditions for air ($\rho_{air} = 1.225$ kg/m$^3$) and water ($\rho_{water} = 1000$ kg/m$^3$). The simulation timestep is set to $0.002$ s to accurately capture the high-frequency dynamics of the water entry/exit impact.
+
+\subsection{Trajectory and Kinematics Analysis}
+The complete trans-medium mission profile is visualized in Fig. \ref{fig:trajectory}. The trajectory demonstrates four distinct phases: (1) \textit{Swim}, where the robot cruises underwater; (2) \textit{Ballistic Ascent}, triggered by the burst propulsion mode to breach the surface; (3) \textit{Pushover}, where the robot transitions pitch to level flight; and (4) \textit{Glide}, where the wings lock into a rigid airfoil shape. The robot achieves a trajectory apex of $8.5$ m, providing sufficient potential energy for an extended glide range.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{image/trajectory.pdf}
+    \caption{Multimodal trans-medium trajectory showing the transition from aquatic swimming to aerial gliding. The color gradient indicates the active locomotion mode.}
+    \label{fig:trajectory}
+\end{figure}
+
+The kinematic performance is further detailed in Fig. \ref{fig:velocity}. The velocity profile reveals a critical spike during the breach event, driven by the pump-jet's burst mode. Following the surface exit, the total speed decays due to gravity and drag until it stabilizes at the equilibrium glide velocity. Fig. \ref{fig:velocity} (bottom) decomposes this into horizontal ($V_x$) and vertical ($V_z$) components, highlighting the rapid conversion of vertical momentum into horizontal cruising speed during the pushover phase.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{image/velocity.pdf}
+    \caption{Velocity profile (A) and vector decomposition (B) throughout the mission. Note the velocity spike at the breach event required to overcome surface tension and gravity.}
+    \label{fig:velocity}
+\end{figure}
+
+\subsection{Dynamic Force and Attitude Stability}
+The ability of the controller to manage the robot's orientation is shown in Fig. \ref{fig:attitude}. The pitch angle ($\theta$) transitions from the oscillating profile characteristic of mobuliform swimming to a steady-state trim condition in air. Crucially, the Angle of Attack (AoA) is maintained within the stable glide region (below $15^\circ$) to prevent stall, as illustrated in the bottom panel of Fig. \ref{fig:attitude}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{image/attitude_angle.pdf}
+    \caption{Attitude dynamics. (Top) Pitch angle $\theta$ vs. Flight Path angle $\gamma$. (Bottom) Angle of Attack profile, confirming the robot remains within the stable linear lift region after transition.}
+    \label{fig:attitude}
+\end{figure}
+
+Fig. \ref{fig:force} presents the temporal evolution of forces. The ``Breach'' phase is characterized by a massive propulsive thrust spike (Red) and a corresponding rise in hydrodynamic drag (Blue). As the robot exits the water (approx. $t=3.2$s), the drag force drops precipitously due to the density change. In the aerial phase, thrust is zeroed, and the robot is supported entirely by aerodynamic lift (Green), verifying the successful rigidification of the wings.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{image/force.pdf}
+    \caption{Dynamic force distribution. The plot illustrates the dramatic drop in drag at water exit and the handover from propulsive thrust to aerodynamic lift.}
+    \label{fig:force}
+\end{figure}
+
+\subsection{Controller Verification}
+The efficacy of the bifurcation-controlled CPG is visualized in the phase portrait in Fig. \ref{fig:cpg}. The system starts in a stable limit cycle (outer rings), generating the rhythmic signals for swimming. Upon triggering the aerial mode ($\mu \rightarrow -1$), the trajectory converges smoothly to the fixed point at the origin. This confirms that the controller transitions without inducing dangerous discontinuities or actuator saturation.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{image/cpg.pdf}
+    \caption{CPG Phase Portrait. The system evolves from a stable limit cycle (swimming) to a stable fixed point (gliding) via bifurcation control.}
+    \label{fig:cpg}
+\end{figure}
+
+\subsection{Energetics}
+Analysis of the Cost of Transport (COT) indicates a significant efficiency gain over traditional hybrids. By utilizing lift-driven gliding rather than powered hovering, the aerial COT is reduced to near-zero (gravity-powered), compared to COT $> 60$ J/(kg$\cdot$m) for multi-rotor counterparts~\cite{stolaroff2018energy, alazuwayer2016loon}. While the LMEE thermal maintenance incurs a power penalty underwater, the total energy expenditure for a standard survey mission is projected to be approximately 40\% lower than equivalent rigid-body systems.

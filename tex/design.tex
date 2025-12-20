@@ -1,0 +1,33 @@
+\section{System Design}
+
+\subsection{Biological Inspiration}
+The design of the Aero-Aqua Ray is predicated on the convergence of two distinct biological paradigms: the efficient, added-mass modulated swimming of the Manta Ray (\textit{Mobula birostris})~\cite{fish2016manta} and the high-stiffness, impulsive gliding of the Flying Fish (\textit{Exocoetidae})~\cite{park2010aerodynamic}.
+
+\paragraph{The Mobuliform Paradigm}
+Manta rays utilize a propulsion mode known as mobuliform locomotion, characterized by the oscillatory motion of large, triangular pectoral fins. Unlike undulatory swimmers that rely on a body-length traveling wave, mobuliform swimmers operate their fins as high-aspect-ratio hydrofoils. The propulsive efficiency of this mode is maximized when the fin structure possesses sufficient flexibility to deform passively under hydrodynamic load. This compliance allows the fin to align with the local flow vector during the recovery stroke, minimizing drag, while maintaining sufficient stiffness to generate thrust during the power stroke.
+
+\paragraph{The Gliding Paradigm}
+Conversely, the flying fish demonstrates the structural rigidity required for aerial transition. To achieve ballistic flight, the organism extends its fins into a rigid, cambered airfoil capable of supporting aerodynamic lift without aeroelastic divergence. This duality—flexible for aquatic efficiency, rigid for aerial stability—serves as the foundational blueprint for the robot's variable-stiffness architecture.
+
+\subsection{Morphological Structure: Origami Mechanics}
+To physically realize this dual-impedance capability, the robot employs a modified Miura-ori origami tessellation for the wing structure, a pattern selected for its single-degree-of-freedom (1-DOF) kinematics and planar folding characteristics that allow the wing to retract into a compact volume with minimal actuation complexity~\cite{miura1985method}. The wing exists in two discrete geometric states: a Folded State (Aquatic), where the tessellation collapses to reduce the wingspan and frontal area, thereby lowering the moment of inertia to facilitate high-frequency oscillation for underwater propulsion and reducing impact forces; and a Deployed State (Aerial), where the structure expands to its maximum span and, by locking the hinge angles, behaves as a rigid cantilevered plate to provide the surface area and stiffness required for gliding.
+
+The auxetic nature (negative Poisson's ratio) of the Miura-ori geometry ensures that spanwise expansion is coupled with chordwise expansion, allowing for rapid deployment during the critical air-water transition phase.
+
+\subsection{Variable Stiffness Materials}
+The core innovation enabling the transition between flexible and rigid states is the integration of Liquid Metal Embedded Elastomer (LMEE) composites within the origami hinges~\cite{schubert2013variable, bartlett2015high}.
+
+The composite consists of micro-droplets of a low-melting-point alloy (LMPA), specifically Field's Metal, dispersed within a soft silicone matrix 1, exhibiting a phase-dependent elastic modulus governed by the state of the metal inclusions. Below the transition temperature ($62^\circ$C), the material enters a Solid State (Rigid) where solid metal droplets form a percolating network or act as high-modulus fillers, dramatically increasing the bulk stiffness of the hinge for aerial gliding. Conversely, above the transition temperature, the material shifts to a Liquid State (Soft) where the droplets melt and lose shear strength, causing the macroscopic stiffness to drop to match the base silicone matrix , allowing for the high compliance required for aquatic swimming.
+
+\paragraph{Actuation and Thermal Control}
+Phase transition is triggered via Joule heating. The LMEE composite is doped with conductive particles to create a resistive heating element. To stiffen the wing for flight, the heating is deactivated, allowing the rapid convective cooling of the water to solidify the metal matrix prior to the breach maneuver. Conversely, continuous heating is applied underwater to maintain compliance.
+
+\subsection{Fabrication and Integration}
+The wing utilizes a multi-material sandwich structure. The rigid facets of the origami pattern are fabricated from laser-cut Carbon Fiber Reinforced Polymer (CFRP) plates to ensure structural integrity. The active LMEE hinges are cast directly between these facets.
+
+A critical challenge in soft-rigid hybrid fabrication is delamination at the material interface. To address this, we employ a chemical anchoring strategy. The CFRP surfaces are treated with a silane coupling agent and plasma activation~\cite{yuk2016tough}, creating covalent bonds between the carbon fiber substrate and the silicone matrix. This bonding technique ensures the wing can withstand the high shear loads experienced during rapid flapping and surface impact.
+
+\subsection{Propulsion Unit}
+While the morphing wings provide lift and maneuvering authority, the high-impulse thrust required to breach the water surface exceeds the capability of the oscillating foil mechanism alone. Therefore, the Aero-Aqua Ray integrates a centralized propulsion unit at the tail.
+
+This unit consists of a high-torque brushless motor driving a pump-jet. The pump-jet configuration shields the rotor from debris and impact damage. During the transition sequence, this motor operates in a ''burst mode'', delivering a momentary thrust spike significantly exceeding the robot's weight to propel it ballistically through the air-water interface~\cite{siddall2014launching}. Once airborne, the propulsion unit powers down, and the robot enters a glide phase supported by the now-rigid wings.

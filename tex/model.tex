@@ -1,0 +1,62 @@
+\section{Motion Modeling and Control}
+
+To enable seamless transition between the disparate fluid domains, we establish a unified physical framework that couples the hydrodynamics of flexible oscillating foils with the aerodynamics of rigid fixed wings. The control architecture utilizes this framework to manage the bifurcation in system dynamics.
+
+\subsection{Unified Physical Framework}
+
+\subsubsection{Hydrodynamics: Modified Lighthill Theory}
+For the aquatic phase, the robot's propulsion is modeled using a modified version of Lighthill’s Elongated Body Theory (LAEBT)~\cite{lighthill1971large}, adapted for high-aspect-ratio pectoral fins. In this high-density fluid regime, thrust generation is dominated by reactive forces resulting from the acceleration of the fluid's added mass.
+
+Let $x$ denote the axis along the chord (swimming direction) and $z(x,t)$ be the lateral displacement of the fin. The reactive force density $f_{reactive}$ (force per unit length) is given by the rate of change of fluid momentum normal to the motion:
+\begin{equation}
+    f_{reactive}(x,t) = - \left( \frac{\partial}{\partial t} + U \frac{\partial}{\partial x} \right) \left[ m_a(x) \left( \frac{\partial z}{\partial t} + U \frac{\partial z}{\partial x} \right) \right]
+\end{equation}
+where $m_a(x)$ is the added mass per unit length, approximated for an elliptical fin section of width $w(x)$ as $m_a(x) = \frac{\pi}{4} \rho_w w(x)^2 \beta$, with $\beta$ representing a geometric shape factor.
+
+To account for viscous effects which are non-negligible for the large surface area of the manta-inspired wings, we incorporate a resistive drag component based on the local cross-flow velocity. The total instantaneous thrust is derived by integrating the projection of these forces along the flight path.
+
+\subsubsection{Aerodynamics: Unsteady Blade Element Theory}
+Upon exiting the water, the physics shift from added-mass dominance to circulation-based lift. Since the added mass of air is negligible compared to the robot's inertia, the reactive terms vanish. The aerial dynamics are modeled using Unsteady Blade Element Theory (UBET)~\cite{sane2002aerodynamic}, assuming the wing has been rigidified by the stiffness modulation system.
+
+For the gliding phase, the governing equations simplify to the steady-state longitudinal dynamics:
+\begin{align}
+    m \dot{V} &= -D - W \sin \gamma \\
+    m V \dot{\gamma} &= L - W \cos \gamma
+\end{align}
+where $\gamma$ is the flight path angle, $V$ is the total velocity, and $L$ and $D$ are the lift and drag forces integrated over the span. The design objective is to maximize the lift-to-drag ratio ($L/D$) by locking the wings into a cambered profile, thereby extending the ballistic range.
+
+\subsubsection{Transition and Impact Dynamics}
+The trans-medium breach introduces a violent discontinuity in the system parameters. The effective mass drops instantaneously from $(m_{body} + m_{added\_water})$ to $m_{body}$, leading to a potential acceleration spike. Furthermore, re-entry imposes an impact load modeled as:
+\begin{equation}
+    F_{impact} \approx \frac{1}{2} \rho_w v^2 C_s A(t)
+\end{equation}
+where $C_s$ is the slamming coefficient. The control strategy mitigates this by folding the wings (reducing wetted area $A(t)$) during the impact phase.
+
+\subsection{Equations of Motion}
+The full system dynamics are described by a 6-DOF rigid-body model augmented with flexible body states:
+\begin{equation}
+    M_{total}(q) \ddot{q} + C(q, \dot{q}) \dot{q} + D(q, \dot{q}) \dot{q} + G(q) = \tau_{act} + F_{ext}
+\end{equation}
+Here, $M_{total}$ incorporates the variable added mass matrix, which is a function of the wing configuration $q$ and fluid density. The damping matrix $D(q, \dot{q})$ captures the nonlinear drag terms derived from the LAEBT and UBET models.
+
+\subsection{Control Architecture}
+
+\subsubsection{Bifurcation-Controlled CPGs}
+To manage the rhythmic flapping underwater and the static stability in air, we employ a Central Pattern Generator (CPG) network based on Hopf oscillators~\cite{righetti2006programmable, ijspeert2008central}. The state equations for the $i$-th oscillator are defined as:
+\begin{align}
+    \dot{x}_i &= \alpha (\mu - r_i^2) x_i - \omega_i y_i \\
+    \dot{y}_i &= \alpha (\mu - r_i^2) y_i + \omega_i x_i
+\end{align}
+where $r_i^2 = x_i^2 + y_i^2$. The parameter $\mu$ serves as the bifurcation parameter governing the robot's behavior mode:
+\begin{itemize}
+    \item \textbf{Aquatic Mode ($\mu > 0$):} The system exhibits a stable limit cycle with amplitude $\sqrt{\mu}$, driving the rhythmic oscillation of the wings for swimming.
+    \item \textbf{Aerial Mode ($\mu < 0$):} The limit cycle vanishes, and the equilibrium point at the origin becomes stable. The oscillations decay naturally, and the wings lock into the neutral gliding position.
+\end{itemize}
+This mathematical property ensures a smooth, continuous transition without logical discontinuities in the actuator commands.
+
+\subsubsection{Stiffness Feedback Loop}
+A secondary reflex loop modulates the stiffness of the LMEE hinges~\cite{schubert2013variable}. The heating current $I_{heat}$ is regulated via a Proportional-Derivative controller:
+\begin{equation}
+    I_{heat} = K_p (E_{target} - E_{est}) + K_d \dot{\epsilon}_{wing}
+\end{equation}
+where $E_{est}$ is the estimated modulus and $\dot{\epsilon}_{wing}$ is the strain rate measured by embedded sensors. This allows the system to actively stiffen the wing in response to turbulence or prepare for high-impact phases.

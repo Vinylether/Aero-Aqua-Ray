@@ -1,0 +1,31 @@
+\documentclass[english]{cccconf}
+\usepackage[comma,numbers,square,sort&compress]{natbib}
+\usepackage{amsmath}
+
+\begin{document}
+
+\title{The Aero-Aqua Ray: A Morphing Trans-medium Robot with Variable-Stiffness Origami Wings for Aquatic-Aerial Transition}
+
+\author{Ximing Huang}
+\affiliation{College of Engineering, Peking University\email{hee@stu.pku.edu.cn}}
+
+% \author{Anonymous Author}
+
+\maketitle
+
+\begin{abstract}
+The development of trans-medium robots capable of operating in both air and water is hindered by the conflicting physical requirements of the two fluids: hydrodynamic efficiency favors compliant, oscillating structures, while aerodynamic flight demands high stiffness to prevent aeroelastic divergence. This paper addresses this impedance mismatch through the design of the \textit{Aero-Aqua Ray}, a bio-inspired platform featuring variable-stiffness origami wings. By integrating Liquid Metal Embedded Elastomers (LMEE) within a Miura-ori tessellation, the robot achieves active modulus modulation, transitioning between compliant mobuliform swimming and rigid ballistic gliding. We establish a unified dynamic framework coupling modified Lighthill’s Elongated Body Theory with Unsteady Blade Element Theory and implement a bifurcation-controlled Central Pattern Generator (CPG) to manage the chaotic air-water interface. Numerical simulations validate the system’s stability and reveal a significantly lower Cost of Transport (COT $\approx$ 15 J/kg$\cdot$m) compared to conventional multi-rotor hybrids, demonstrating the efficacy of soft-morphing strategies for cross-domain locomotion.
+\end{abstract}
+
+\keywords{Trans-medium Robotics, Multimodal Locomotion, Soft Robotics, Variable Stiffness (LMEE), Origami Engineering (Miura-ori), Bio-inspired Design, Central Pattern Generators (CPG).}
+
+\input{intro}
+\input{design}
+\input{model}
+\input{result}
+\input{conclusion}
+
+\bibliographystyle{unsrt}
+\bibliography{reference}
+
+\end{document}
