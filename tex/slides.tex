@@ -1,214 +1,238 @@
 \documentclass[aspectratio=169, xcolor=table]{beamer}
 
-% 使用 CJKutf8 替代 ctex 以避开 pdflatex 的字体映射错误
+% 语言支持使用 CJKutf8
 \usepackage{CJKutf8}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{multicol}
 
 % 主题设置
 \usetheme{Madrid}
 \usecolortheme{whale}
 
-% 幻灯片信息
-\title[Aero-Aqua Ray]{The Aero-Aqua Ray: A Morphing Trans-medium Robot}
-\subtitle{具有可变刚度折纸翼的水空跨介质仿生机器人}
-\author[Ximing Huang]{黄熙鸣}
-\institute[PKU]{北京大学工学院}
-\date{\today}
+% 封底/页码设置
+% \setbeamertemplate{navigation symbols}{}
+    \title{The Aero-Aqua Ray: A Morphing Trans-medium Robot}
+    \subtitle{具有可变刚度翼的水空跨介质机器人研究}
+    \author[Ximing Huang]{黄熙鸣}
+    \institute[PKU]{北京大学工学院 \\ \texttt{hee@stu.pku.edu.cn}}
+    \date{\today}
 
 \begin{document}
-\begin{CJK*}{UTF8}{gbsn} % 使用标准的宋体字库
+\begin{CJK*}{UTF8}{gbsn}
 
-% 标题页
+% --- 标题页 ---
 \begin{frame}
     \titlepage
 \end{frame}
 
-% 目录
-\begin{frame}{目录}
+% --- 目录 ---
+\begin{frame}{报告大纲}
     \tableofcontents
 \end{frame}
 
-\section{研究背景与意义}
-\begin{frame}{跨介质运动的难题 (The Trans-medium Dilemma)}
+% --- 第一部分：研究背景 ---
+\section{研究背景与动机}
+\begin{frame}{跨介质运动的两难困境}
     \begin{itemize}
-        \item \textbf{环境差异巨大}：水的密度约是空气的800倍，动态粘度约是空气的55倍。
+        \item \textbf{环境介质差异}：水的密度约是空气的800倍，动态粘度约为空气的55倍。
         \item \textbf{设计冲突}：
         \begin{itemize}
-            \item \textbf{水下}：需要柔性结构，利用流固耦合 (FSI) 和附加质量产生推力。
-            \item \textbf{空中}：需要高刚度机翼，维持升阻比并避免气动弹性颤振。
+            \item \textbf{水下环境}：偏好中性浮力的柔性结构，通过操纵附加质量（Added Mass）产生高效推力。
+            \item \textbf{空中环境}：需要高长径比的刚性机翼，以最大化升阻比（$L/D$）并防止气动弹性颤振。
         \end{itemize}
-        \item \textbf{现有方案不足}：多采用“暴力耦合”，导致两端效率均低下。
+        \item \textbf{现有局限}：传统“硬耦合”方案（如加装防水壳的无人机）在不同介质中存在严重的动力匹配失衡。
     \end{itemize}
 \end{frame}
 
-\section{生物启发设计}
-\begin{frame}{生物启发：从蝠鲼到飞鱼}
-    本研究融合了两种生物的优势：
-    \begin{columns}
-        \column{0.5\textwidth}
-        \begin{block}{蝠鲼 (Mobuliform)}
-            \begin{itemize}
-                \item \textbf{运动}：通过胸鳍的背腹振荡推进。
-                \item \textbf{特点}：高推进效率（可达89\%），利用柔性优化攻角。
-            \end{itemize}
-        \end{block}
-        \column{0.5\textwidth}
-        \begin{block}{飞鱼 (Gliding)}
-            \begin{itemize}
-                \item \textbf{运动}：冲出水面后锁紧胸鳍进行滑翔。
-                \item \textbf{特点}：极高的结构刚度，支撑长距离滑翔。
-            \end{itemize}
-        \end{block}
-    \end{columns}
-    \vspace{0.3cm}
-    \centering \textit{核心目标：通过可变刚度机翼实现柔性游泳与刚性滑翔的统一。}
+\begin{frame}{生物启发：蝠鲼与飞鱼的融合}
+    \begin{itemize}
+        \item \textbf{蝠鲼模式 (Mobuliform)}：通过胸鳍拍打产生离散的高环量涡环，推进效率可达89\%。
+        \item \textbf{飞鱼模式 (Gliding)}：在突破水面瞬间将机翼锁定为刚性翼型，滑翔距离可超400米。
+        \item \textbf{本研究目标}：开发 \textit{Aero-Aqua Ray} 平台，通过自适应变形弥合柔性水下运动与刚性空中滑翔之间的鸿沟。
+    \end{itemize}
 \end{frame}
 
+% --- 第二部分：系统设计 ---
 \section{系统设计与材料}
-\begin{frame}{形态结构：三浦折纸 (Miura-ori)}
-    \begin{columns}
-        \column{0.6\textwidth}
-        \begin{itemize}
-            \item \textbf{1-DOF 运动}：单自由度运动简化了驱动逻辑。
-            \item \textbf{两种状态}：
-            \begin{itemize}
-                \item \textbf{折叠态 (水下)}：减小翼展和迎风面积，降低惯量。
-                \item \textbf{展开态 (空中)}：达到最大翼展，充当刚性悬臂梁。
-            \end{itemize}
-            \item \textbf{材料}：碳纤维增强聚合物 (CFRP) 面板 + LMEE 铰链。
-        \end{itemize}
-        \column{0.4\textwidth}
-        \centering \textit{Miura-ori 几何结构的负泊松比特性确保了双向同步展开。}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{核心创新：液态金属嵌入弹性体 (LMEE)}
-    利用液态金属合金实现刚度调制：
+\begin{frame}{形态结构：三浦折纸 (Miura-ori) 翼}
     \begin{itemize}
-        \item \textbf{相变机制}：Field's Metal 熔点为 $62^\circ$C。
-        \item \textbf{刚度切换}：
+        \item \textbf{运动学特性}：采用改进的三浦折纸（Miura-ori）纹理，具有单自由度（1-DOF）展收特性。
+        \item \textbf{双态变换}：
         \begin{itemize}
-            \item \textbf{固体状态 ( $< 62^\circ$C)}：刚度大幅提升，支撑空中滑翔。
-            \item \textbf{液体状态 ( $> 62^\circ$C)}：模量下降，满足水下高顺应性需求。
+            \item \textbf{折叠态 (水下)}：减小翼展和受风面积，降低转动惯量以支持高频拍动。
+            \item \textbf{展开态 (空中)}：扩展至最大翼展，铰链锁定后充当刚性悬臂梁。
         \end{itemize}
-        \item \textbf{热控策略}：通过焦耳加热控制相变；利用水流对流自然冷却实现快速硬化。
+        \item \textbf{材料构成}：机翼骨架为激光切割的碳纤维板（CFRP），铰链处集成相变材料。
     \end{itemize}
 \end{frame}
 
-\section{动力学建模与控制}
-\begin{frame}{统一物理框架}
-    针对不同介质采用不同的理论模型：
+\begin{frame}{核心技术：液态金属嵌入弹性体 (LMEE)}
     \begin{itemize}
-        \item \textbf{水下 (LAEBT)}：改进的 Lighthill 长体理论，基于附加质量产生的反作用力。
-        \item \textbf{空中 (UBET)}：非定常叶素理论，侧重于环量产生的升力和阻力。
-        \item \textbf{跨介质冲击}：建立 6-DOF 刚体模型，通过折叠机翼降低入水冲击载荷。
+        \item \textbf{材料特性}：在硅胶基底中嵌入 Field's Metal 微滴（熔点 $62^\circ$C）。
+        \item \textbf{刚度调节策略}：
+        \begin{itemize}
+            \item \textbf{硬化}：停止加热，利用水流对流冷却使液态金属固化，满足滑翔所需的结构强度。
+            \item \textbf{软化}：通过焦耳加热使金属液化，机翼刚度降至硅胶量级，适应高效游泳。
+        \end{itemize}
+        \item \textbf{化学锚定}：利用硅烷偶联剂处理 CFRP 表面，防止柔性铰链在高速运动中脱层。
+    \end{itemize}
+\end{frame}
+
+% --- 第三部分：动力学建模 ---
+\section{建模与控制策略}
+\begin{frame}{统一物理框架 (Unified Physical Framework)}
+    \begin{itemize}
+        \item \textbf{水下相 (LAEBT)}：基于改进的 Lighthill 长体理论。推力源于加速流体附加质量产生的反作用力 $f_{reactive}$。
+        \item \textbf{空中相 (UBET)}：采用非定常叶素理论。空气附加质量可忽略，升力由环量理论主导。
+        \item \textbf{跨介质冲击载荷}：建立包含变量附加质量矩阵的 6-DOF 模型，通过折叠机翼减少水面入水冲击力 $F_{impact}$。
     \end{itemize}
 \end{frame}
 
 \begin{frame}{控制架构：分岔控制 CPG}
-    采用基于 Hopf 振荡器的中枢模式发生器 (CPG)：
     \begin{itemize}
-        \item \textbf{分岔参数 $\mu$}：
+        \item \textbf{Hopf 振荡器网络}：采用状态方程控制执行器轨迹。
+        \item \textbf{分岔参数 $\mu$ 的作用}：
         \begin{itemize}
-            \item \textbf{水下模式 ($\mu > 0$)}：产生稳定极限环，驱动机翼节律性拍打。
-            \item \textbf{空中模式 ($\mu < 0$)}：极限环消失，收敛至稳定平衡点，机翼锁定。
+            \item $\mu > 0$：系统处于稳定极限环，驱动机翼进行节奏性游泳。
+            \item $\mu < 0$：极限环消失，轨迹自然收敛至原点，机翼锁定在零偏转位置。
         \end{itemize}
-        \item \textbf{优点}：确保了从节律运动到静态姿态转换的连续平滑性。
+        \item \textbf{刚度反馈}：集成 PD 控制器通过电流调节铰链刚度，实时应对扰动。
     \end{itemize}
 \end{frame}
 
-\section{仿真结果与分析}
-\begin{frame}{跨介质运动轨迹分析}
+% --- 第四部分：仿真分析（含配图文字） ---
+\section{仿真结果分析}
+
+\begin{frame}{任务剖面与运动轨迹}
     \begin{columns}
-        \column{0.4\textwidth}
-        \begin{itemize}
-            \item \textbf{四个阶段}：
-            1. \textit{Swim} (巡航)
-            2. \textit{Ballistic Ascent} (爆发推进)
-            3. \textit{Pushover} (转弯平飞)
-            4. \textit{Glide} (刚性滑翔)
-            \item \textbf{表现}：轨迹最高点达 $8.5$ m。
-        \end{itemize}
-        \column{0.6\textwidth}
+        \column{0.5\textwidth}
         \begin{figure}
             \centering
             \includegraphics[width=\linewidth]{image/trajectory.pdf}
-            \caption{跨介质任务轨迹图}
-        \end{figure}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{速度与受力特性}
-    \begin{columns}
-        \column{0.5\textwidth}
-        \begin{figure}
-            \centering
-            \includegraphics[keepaspectratio, height=0.55\textheight]{image/velocity.pdf}
-            \caption{速度曲线}
+            \caption{多模式跨介质任务轨迹图}
         \end{figure}
         \column{0.5\textwidth}
-        \begin{figure}
-            \centering
-            \includegraphics[keepaspectratio, height=0.55\textheight]{image/force.pdf}
-            \caption{力学演化}
-        \end{figure}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{姿态稳定性与控制器验证}
-    \begin{columns}
-        \column{0.5\textwidth}
-        \begin{figure}
-            \centering
-            \includegraphics[keepaspectratio, height=0.55\textheight]{image/attitude_angle.pdf}
-            \caption{姿态动力学：攻角稳定在滑翔区间}
-        \end{figure}
-        \column{0.5\textwidth}
-        \begin{figure}
-            \centering
-            \includegraphics[keepaspectratio, height=0.55\textheight]{image/cpg.pdf}
-            \caption{CPG 相图：平稳收敛至固定点}
-        \end{figure}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{能效分析 (Energetics)}
-    \begin{itemize}
-        \item \textbf{运输代价 (COT)}：
+        \textbf{图示解析}：
         \begin{itemize}
-            \item 本系统仿真测得 COT $\approx 15$ J/(kg$\cdot$m)。
-            \item 传统多旋翼混合动力系统 COT $> 60$ J/(kg$\cdot$m)。
+            \item 完整任务分为四个阶段：\textit{Swim}（水下巡航）、\textit{Ballistic Ascent}（弹道上升）、\textit{Pushover}（转弯平飞）及 \textit{Glide}（刚性滑翔）。
+            \item \textbf{关键表现}：机器人实现了 $8.5$ m 的轨迹顶点高度，为后续长距离滑翔提供了充足势能。
         \end{itemize}
-        \item \textbf{能效提升}：虽然热管理有功耗开销，但通过滑翔阶段，总能耗预计降低约 40\%。
+    \end{columns}
+\end{frame}
+
+\begin{frame}{运动速度特性分析}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\linewidth]{image/velocity.pdf}
+            \caption{速度曲线及矢量分解}
+        \end{figure}
+        \column{0.5\textwidth}
+        \textbf{图示解析}：
+        \begin{itemize}
+            \item \textbf{突破瞬态}：在跨越水面（Breach）瞬间，受泵喷推力突发模式驱动，速度出现明显峰值。
+            \item \textbf{速度演化}：出水后总速度随重力和阻力衰减，最终稳定在平衡滑翔速度。
+            \item \textbf{分量转换}：在 \textit{Pushover} 阶段，垂直动量被高效转化为水平巡航速度。
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{姿态稳定性验证}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\linewidth]{image/attitude_angle.pdf}
+            \caption{俯仰角与迎角演化}
+        \end{figure}
+        \column{0.5\textwidth}
+        \textbf{图示解析}：
+        \begin{itemize}
+            \item \textbf{状态切换}：俯仰角（$\theta$）从水下振荡特征平稳过渡到空中的稳态配平条件。
+            \item \textbf{安全保障}：底部面板显示迎角（AoA）在转换后始终保持在 $15^\circ$ 以下的稳定滑翔区，有效防止了气动失速。
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{力学平衡与环境切换}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\linewidth]{image/force.pdf}
+            \caption{动态力分布图}
+        \end{figure}
+        \column{0.5\textwidth}
+        \textbf{图示解析}：
+        \begin{itemize}
+            \item \textbf{突破阶段}：在 $t \approx 3.2$ s 处，可见巨大的红色推力脉冲和相应的蓝色流体阻力峰值。
+            \item \textbf{介质突变}：出水瞬间，由于流体密度骤减，阻力（蓝色）急剧下降。
+            \item \textbf{任务移交}：空中阶段推力归零，机器人完全依靠气动升力（绿色）维持飞行。
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{控制器有效性：CPG 相图}
+    \begin{columns}
+        \column{0.45\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=0.85\linewidth]{image/cpg.pdf}
+            \caption{CPG 相空间轨迹}
+        \end{figure}
+        \column{0.55\textwidth}
+        \textbf{图示解析}：
+        \begin{itemize}
+            \item \textbf{运动平滑性}：系统从外层的大幅值稳定极限环（游泳状态）平稳收敛至原点处的固定点（滑翔状态）。
+            \item \textbf{逻辑连续性}：分岔控制避免了执行器指令在转换瞬间出现逻辑不连续或饱和风险，证明了控制架构的鲁棒性。
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{能效评估：运输代价 (COT)}
+    \begin{itemize}
+        \item \textbf{效率优势}：得益于升力主导的滑翔模式而非强力悬停，空中 COT 接近于零。
+        \item \textbf{对比分析}：
+        \begin{itemize}
+            \item 本系统仿真 COT 约为 $15$ J/(kg$\cdot$m)。
+            \item 传统多旋翼混合动力平台 COT 常超过 $60$ J/(kg$\cdot$m)。
+        \end{itemize}
+        \item \textbf{总体收益}：尽管水下热维持会带来额外开销，但在标准探测任务中，总能耗预计比传统方案降低 40\%。
     \end{itemize}
 \end{frame}
 
+% --- 第五部分：结论与未来展望 ---
 \section{结论与展望}
-\begin{frame}{总结与展望}
-    \begin{block}{主要结论}
+\begin{frame}{(Conclusion}
+    \begin{itemize}
+        \item \textbf{核心贡献}：提出并通过仿真验证了一种基于可变刚度折纸翼的跨介质机器人方案。
+        \item \textbf{主要结论}：
         \begin{itemize}
-            \item 成功验证了基于可变刚度折纸结构的跨介质机器人方案。
-            \item 解决了传统混合动力系统中推进系统的阻抗匹配难题。
-            \item 实现了高效水下巡航与长距离空中滑翔的统一。
+            \item 物理属性的杂化（柔性+刚性）比单一推进系统的杂化更能有效解决阻抗匹配难题。
+            \item 分岔控制的 CPG 能够成功管理水空界面复杂的非线性动态切换。
+            \item 系统在保持蝠鲼高效游泳的同时，具备了传统刚性翼的滑翔扩展能力。
         \end{itemize}
-    \end{block}
-    \begin{block}{未来工作}
-        \begin{itemize}
-            \item \textbf{单体4D打印}：消除材料界面分层风险。
-            \item \textbf{自修复蒙皮}：提高在复杂水域的生存能力。
-            \item \textbf{AI流场控制}：实现局部刚度的自适应动态调节。
-        \end{itemize}
-    \end{block}
+    \end{itemize}
 \end{frame}
 
+\begin{frame}{Future Work}
+    \begin{enumerate}
+        \item \textbf{一体化 4D 打印}：采用多材料 4D 打印取代目前的组装工艺，消除碳纤维与铰链间的脱层隐患。
+        \item \textbf{自修复柔性蒙皮}：在硅胶基底中集成微胶囊自修复药剂，以应对复杂水域环境下的碰撞与穿刺。
+        \item \textbf{AI 驱动流场控制}：利用深度强化学习（DRL）结合分布式应变感知，实现机翼局部刚度的实时动态调节，提升抗扰能力。
+    \end{enumerate}
+\end{frame}
+
+% --- 结束页 ---
 \begin{frame}
     \centering
-    \Huge \textcolor{blue}{感谢您的聆听！}
+    \Huge \textcolor{blue}{感谢各位专家的聆听！}
     
-    \vspace{0.5cm}
-    \large Q \& A
+    \vspace{0.8cm}
+    \large 请批评指正 (Q \& A)
 \end{frame}
 
 \end{CJK*}
